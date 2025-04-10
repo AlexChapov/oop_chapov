@@ -20,8 +20,8 @@ class Category:
     description: str  # описание
     products: list  # список товаров категории
 
-    number_of_categories = []
-    number_of_products = []
+    number_of_categories = 0
+    number_of_products = 0
 
     def __init__(self, name: str, description: str) -> None:
 
