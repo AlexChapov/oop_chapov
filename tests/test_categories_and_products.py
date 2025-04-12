@@ -42,3 +42,13 @@ def test_init_category(category_phone: Category) -> None:
         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
     )
     assert Category.category_count == 1
+
+
+# def test_init_category(category_phone: Category) -> None:
+#
+#     assert category_phone.name == "Смартфоны"
+#     assert (
+#         category_phone.description
+#         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
+#     )
+#     assert Category.category_count == 1
