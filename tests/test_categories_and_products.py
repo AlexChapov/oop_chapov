@@ -15,6 +15,16 @@ def test_init_products(products_samsung: Product) -> None:
     assert products_samsung.quantity == 5
 
 
+def test_set_negative_price(products_samsung: Product) -> None:
+    products_samsung.price = -100.0
+    assert products_samsung.price == -100.0
+
+
+def test_set_zero_price(products_samsung: Product) -> None:
+    products_samsung.price = 0
+    assert products_samsung.price == 0
+
+
 @pytest.fixture()
 def category_phone() -> Category:
     return Category(
@@ -31,4 +41,4 @@ def test_init_category(category_phone: Category) -> None:
         category_phone.description
         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
     )
-    assert Category.number_of_categories == 1
+    assert Category.category_count == 1
