@@ -8,6 +8,20 @@ def products_samsung() -> Product:
     return Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
 
 
+@pytest.fixture()
+def product_iphone() -> Product:
+    return Product('Iphone', 'Nano-Sim + eSim, 512Gb, Black', 104000, 2)
+
+
+@pytest.fixture()
+def category_phone() -> Category:
+    return Category(
+        "Смартфоны",
+        "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
+        ["product1", "product2", "product3"],
+    )
+
+
 def test_init_products(products_samsung: Product) -> None:
     assert products_samsung.name == "Samsung Galaxy S23 Ultra"
     assert products_samsung.description == "256GB, Серый цвет, 200MP камера"
@@ -25,20 +39,27 @@ def test_set_zero_price(products_samsung: Product) -> None:
     assert products_samsung.price == 0
 
 
-@pytest.fixture()
-def category_phone() -> Category:
-    return Category(
-        "Смартфоны",
-        "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
-        # ["product1", "product2", "product3"],
-    )
+# def test_init_category(category_phone: Category) -> None:
+#
+#     assert category_phone.name == "Смартфоны"
+#     assert (
+#         category_phone.description
+#         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
+#     )
+#     assert Category.category_count == 1
+#
+#
+# def test_init_product(category_phone: Category) -> None:
+#
+#     assert category_phone.name == "Смартфоны"
+#     assert (
+#         category_phone.description
+#         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
+#     )
+#     assert Category.product_count == 6
 
 
-def test_init_category(category_phone: Category) -> None:
-
-    assert category_phone.name == "Смартфоны"
-    assert (
-        category_phone.description
-        == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
-    )
-    assert Category.category_count == 1
+def test_category_store_products_count(products_samsung, product_iphone):
+    category = Category('SmartPhones', '', [product_iphone, products_samsung])
+    products_count = products_samsung.quantity + product_iphone.quantity
+    assert category.product_count == products_count
