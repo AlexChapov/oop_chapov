@@ -30,7 +30,7 @@ def category_phone() -> Category:
     return Category(
         "Смартфоны",
         "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
-        # ["product1", "product2", "product3"],
+        ["product1", "product2", "product3"],
     )
 
 
@@ -44,11 +44,11 @@ def test_init_category(category_phone: Category) -> None:
     assert Category.category_count == 1
 
 
-# def test_init_category(category_phone: Category) -> None:
-#
-#     assert category_phone.name == "Смартфоны"
-#     assert (
-#         category_phone.description
-#         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
-#     )
-#     assert Category.category_count == 1
+def test_init_product(category_phone: Category) -> None:
+
+    assert category_phone.name == "Смартфоны"
+    assert (
+        category_phone.description
+        == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
+    )
+    assert Category.product_count == 6
