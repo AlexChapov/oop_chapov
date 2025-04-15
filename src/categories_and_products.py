@@ -37,8 +37,7 @@ class Product:
         “Цена не должна быть нулевая или отрицательная”"""
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
-        else:
-            return
+            self.__price = new_price
 
 
 class Category:

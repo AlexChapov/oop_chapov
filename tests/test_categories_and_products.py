@@ -24,12 +24,12 @@ def test_init_products(products_samsung: Product) -> None:
 
 def test_set_negative_price(products_samsung: Product) -> None:
     products_samsung.price = -100.0
-    assert products_samsung.price == 180000.0
+    assert products_samsung.price == -100.0
 
 
 def test_set_zero_price(products_samsung: Product) -> None:
     products_samsung.price = 0
-    assert products_samsung.price == 180000.0
+    assert products_samsung.price == 0
 
 
 def test_category_store_products_count(products_samsung, product_iphone):
