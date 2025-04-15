@@ -10,16 +10,7 @@ def products_samsung() -> Product:
 
 @pytest.fixture()
 def product_iphone() -> Product:
-    return Product('Iphone', 'Nano-Sim + eSim, 512Gb, Black', 104000, 2)
-
-
-@pytest.fixture()
-def category_phone() -> Category:
-    return Category(
-        "Смартфоны",
-        "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
-        ["product1", "product2", "product3"],
-    )
+    return Product("Iphone", "Nano-Sim + eSim, 512Gb, Black", 104000, 2)
 
 
 def test_init_products(products_samsung: Product) -> None:
@@ -39,27 +30,7 @@ def test_set_zero_price(products_samsung: Product) -> None:
     assert products_samsung.price == 0
 
 
-# def test_init_category(category_phone: Category) -> None:
-#
-#     assert category_phone.name == "Смартфоны"
-#     assert (
-#         category_phone.description
-#         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
-#     )
-#     assert Category.category_count == 1
-#
-#
-# def test_init_product(category_phone: Category) -> None:
-#
-#     assert category_phone.name == "Смартфоны"
-#     assert (
-#         category_phone.description
-#         == "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни"
-#     )
-#     assert Category.product_count == 6
-
-
 def test_category_store_products_count(products_samsung, product_iphone):
-    category = Category('SmartPhones', '', [product_iphone, products_samsung])
+    category = Category("SmartPhones", "", [product_iphone, products_samsung])
     products_count = products_samsung.quantity + product_iphone.quantity
     assert category.product_count == products_count
