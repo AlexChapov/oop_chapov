@@ -14,13 +14,7 @@ class Product:
 
     @classmethod
     def new_product(cls, product_data):
-        """Принимает на вход параметры товара в словаре и возвращает созданный объект класса Product"""
-        name = product_data.get("name") or ""
-        description = product_data.get("description") or ""
-        price = product_data.get("price", 0.0)
-        quantity = product_data.get("quantity", 0)
-
-        return cls(name, description, price, quantity)
+        return cls(**product_data)
 
     @property
     def price(self) -> float:
