@@ -1,5 +1,5 @@
 class Product:
-    """Класс 'Продукты' со свойствами указанными ниже"""
+    """Класс 'Продукты' со свойствами и методами"""
 
     name: str  # название
     description: str  # описание
@@ -14,13 +14,12 @@ class Product:
 
     @classmethod
     def new_product(cls, product_data):
+        """Создает продукт из словаря с данными."""
         return cls(**product_data)
 
     @property
     def price(self) -> float:
-        """
-        Геттер для приватного атрибута цены.
-        """
+        """Геттер для приватного атрибута цены."""
         return self.__price
 
     @price.setter
@@ -34,34 +33,62 @@ class Product:
         else:
             self.__price = new_price
 
+    def __str__(self) -> str:
+        """Добавлено строковое отображение в формате 'Название продукта, 80 руб. Остаток: 15 шт.'"""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        """Реализация возможности сложения стоимости двух товаров на складе,
+        если сложение невозможно возвращает ошибку TypeError"""
+        if isinstance(other, Product):
+            return self.price * self.quantity + other.price * other.quantity
+        return TypeError
+
 
 class Category:
-    """Класс 'Категории продуктов' со свойствами указанными ниже"""
+    """Класс 'Категории продуктов'"""
 
     name: str  # название
     description: str  # описание
     __products: list[Product]  # список товаров категории
 
-    category_count = 0
-    product_count = 0
+    _category_count = 0  # Счетчик категорий
+    _product_count = 0  # Счетчик количества товаров
 
     def __init__(self, name: str, description: str, products: list[Product]) -> None:
         self.name = name
         self.description = description
         self.__products = products
 
-        Category.category_count += 1
-        Category.product_count += sum(product.quantity for product in products)
+        Category._category_count += 1
+        Category._product_count += sum(p.quantity for p in products)
 
     def add_product(self, product: Product) -> None:
         """Добавляет продукт в категорию"""
         self.__products.append(product)
-        Category.product_count += 1
+        Category._product_count += product.quantity
 
     @property
     def products(self) -> list:
-        """Возвращает список товаров"""
-        formatted_list = []
-        for product in self.__products:
-            formatted_list.append(f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.")
-        return formatted_list
+        """Возвращает список продуктов в виде строки 'Название продукта, 80 руб. Остаток: 15 шт.'"""
+        return [str(product) for product in self.__products]
+
+    @property
+    def product_count(self):
+        """Считает общее количество"""
+        return sum(product.quantity for product in self.__products)
+
+    @staticmethod
+    def get_category_count():
+        """Считает общее количество категорий"""
+        return Category._category_count
+
+    @staticmethod
+    def get_product_count():
+        """Возвращает общее количество всех товаров всех категорий"""
+        return Category._product_count
+
+    def __str__(self) -> str:
+        """Выводит название категории и общее количество товаров в ней"""
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
