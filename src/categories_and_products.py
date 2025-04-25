@@ -24,25 +24,50 @@ class Product:
 
     @price.setter
     def price(self, new_price: float) -> None:
-        """Сеттер для приватного атрибута цены.
-        Реализует проверку:
-        в случае если цена равна или ниже нуля, выводит сообщение в консоль
-        “Цена не должна быть нулевая или отрицательная”"""
+        """Сеттер для приватного атрибута цены."""
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         else:
             self.__price = new_price
 
+    def __add__(self, other):
+        """Реализует сложение стоимости двух продуктов, если типы совпадают."""
+        if not isinstance(other, self.__class__):
+            raise TypeError("Нельзя складывать продукты разных типов")
+        return self.price * self.quantity + other.price * other.quantity
+
     def __str__(self) -> str:
-        """Добавлено строковое отображение в формате 'Название продукта, 80 руб. Остаток: 15 шт.'"""
+        """Строковое представление продукта."""
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
-    def __add__(self, other):
-        """Реализация возможности сложения стоимости двух товаров на складе,
-        если сложение невозможно возвращает ошибку TypeError"""
-        if isinstance(other, Product):
-            return self.price * self.quantity + other.price * other.quantity
-        return TypeError
+
+class Smartphone(Product):
+    """Класс для представления смартфонов, наследуется от Product."""
+
+    def __init__(self, name, description, price, quantity, efficiency, model, memory, color):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+    def __str__(self) -> str:
+        """Строковое представление для смартфона."""
+        return super().__str__() + f", Модель: {self.model}, Эффективность: {self.efficiency}%"
+
+
+class LawnGrass(Product):
+    """Класс для представления газонной травы, наследуется от Product."""
+
+    def __init__(self, name, description, price, quantity, country, germination_period, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+    def __str__(self) -> str:
+        """Строковое представление для газонной травы."""
+        return super().__str__() + f", Страна: {self.country}, Период прорастания: {self.germination_period}, Цвет: {self.color}"
 
 
 class Category:
@@ -64,31 +89,33 @@ class Category:
         Category._product_count += sum(p.quantity for p in products)
 
     def add_product(self, product: Product) -> None:
-        """Добавляет продукт в категорию"""
+        """Добавляет продукт в категорию, проверяя тип."""
+        if not isinstance(product, (Product, Smartphone, LawnGrass)):
+            raise TypeError("Можно добавлять только объекты типа Product, Smartphone, LawnGrass или их наследников")
         self.__products.append(product)
         Category._product_count += product.quantity
 
     @property
     def products(self) -> list:
-        """Возвращает список продуктов в виде строки 'Название продукта, 80 руб. Остаток: 15 шт.'"""
+        """Возвращает список продуктов в виде строки."""
         return [str(product) for product in self.__products]
 
     @property
     def product_count(self):
-        """Считает общее количество"""
+        """Считает общее количество товаров."""
         return sum(product.quantity for product in self.__products)
 
     @staticmethod
     def get_category_count():
-        """Считает общее количество категорий"""
+        """Считает общее количество категорий."""
         return Category._category_count
 
     @staticmethod
     def get_product_count():
-        """Возвращает общее количество всех товаров всех категорий"""
+        """Возвращает общее количество всех товаров всех категорий."""
         return Category._product_count
 
     def __str__(self) -> str:
-        """Выводит название категории и общее количество товаров в ней"""
+        """Выводит название категории и общее количество товаров в ней."""
         total_quantity = sum(product.quantity for product in self.__products)
         return f"{self.name}, количество продуктов: {total_quantity} шт."
