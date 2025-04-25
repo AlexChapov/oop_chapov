@@ -67,7 +67,10 @@ class LawnGrass(Product):
 
     def __str__(self) -> str:
         """Строковое представление для газонной травы."""
-        return super().__str__() + f", Страна: {self.country}, Период прорастания: {self.germination_period}, Цвет: {self.color}"
+        return (
+            super().__str__()
+            + f", Страна: {self.country}, Период прорастания: {self.germination_period}, Цвет: {self.color}"
+        )
 
 
 class Category:
