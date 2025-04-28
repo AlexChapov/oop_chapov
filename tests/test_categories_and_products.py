@@ -113,7 +113,7 @@ def test_add_invalid_product_to_category(category):
 
 
 def test_create_logger_mixin(capsys):
-    product1 = Product("Test Product", "Описание продукта", 1200.0, 10)
+    Product("Test Product", "Описание продукта", 1200.0, 10)
 
     captured = capsys.readouterr()
 
