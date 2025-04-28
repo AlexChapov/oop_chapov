@@ -5,19 +5,8 @@ class CreateLoggerMixin:
     """Миксин для логирования создания объекта."""
 
     def __init__(self, *args, **kwargs):
-        self.quantity = None
-        self.description = None
-        self.name = None
         cls_name = self.__class__.__name__
         print(f"Создан объект класса {cls_name} с аргументами: {args} и именованными аргументами: {kwargs}")
-        super().__init__(*args, **kwargs)
-
-    def __repr__(self):
-        """Получаем доступ к атрибутам через super() или getattr()"""
-        try:
-            return f"{self.__class__.__name__}({self.name!r}, {self.description!r}, {getattr(self, '_BaseProduct__price', 'без цены')}, {self.quantity})"
-        except AttributeError:
-            return f"{self.__class__.__name__}({self.__dict__})"
 
 
 class BaseProduct(ABC):
@@ -26,30 +15,15 @@ class BaseProduct(ABC):
     name: str
     description: str
     quantity: int
-    __price: float
-
-    @abstractmethod
-    def __init__(self, name: str, description: str, quantity: int) -> None:
-        self.name = name
-        self.description = description
-        self.quantity = quantity
-
-    @property
-    @abstractmethod
-    def price(self) -> float:
-        pass
-
-    @price.setter
-    @abstractmethod
-    def price(self, new_price: float) -> None:
-        pass
 
     @abstractmethod
     def __str__(self) -> str:
+        """Строковое представление продукта."""
         pass
 
     @abstractmethod
     def __add__(self, other):
+        """Операция сложения двух продуктов."""
         pass
 
 
@@ -58,12 +32,10 @@ class Product(CreateLoggerMixin, BaseProduct):
 
     def __init__(self, name: str, description: str, price: float = 0, quantity: int = 0) -> None:
         super().__init__(name, description, quantity)
+        self.quantity = quantity
+        self.description = description
+        self.name = name
         self.__price = price
-
-    @classmethod
-    def new_product(cls, product_data):
-        """Создает продукт из словаря с данными."""
-        return cls(**product_data)
 
     @property
     def price(self) -> float:
@@ -87,6 +59,11 @@ class Product(CreateLoggerMixin, BaseProduct):
     def __str__(self) -> str:
         """Строковое представление продукта."""
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __repr__(self):
+        """Возвращает строковое представление объекта для отладки."""
+        price_repr = "без цены" if self.price == 0 else self.price
+        return f"Product('{self.name}', '{self.description}', {price_repr}, {self.quantity})"
 
 
 class Smartphone(Product):

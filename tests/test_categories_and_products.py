@@ -126,4 +126,6 @@ def test_create_logger_mixin(capsys):
 
 
 def test_repr(product1):
-    assert repr(product1) == "Product('Samsung Galaxy S23 Ultra', '256GB, Серый цвет, 200MP камера', без цены, 5)"
+    assert repr(product1) == "Product('Samsung Galaxy S23 Ultra', '256GB, Серый цвет, 200MP камера', 180000.0, 5)"
+    product_zero_price = Product("Test Product", "Описание продукта", 0, 10)
+    assert repr(product_zero_price) == "Product('Test Product', 'Описание продукта', без цены, 10)"
