@@ -1,16 +1,64 @@
-class Product:
-    """Класс 'Продукты' со свойствами и методами"""
+from abc import ABC, abstractmethod
 
-    name: str  # название
-    description: str  # описание
-    __price: float  # цена
-    quantity: int  # количество в наличии
 
-    def __init__(self, name: str, description: str, price: float = 0, quantity: int = 0) -> None:
+class CreateLoggerMixin:
+    """Миксин для логирования создания объекта."""
+
+    def __init__(self, *args, **kwargs):
+        self.quantity = None
+        self.description = None
+        self.name = None
+        cls_name = self.__class__.__name__
+        print(f"Создан объект класса {cls_name} с аргументами: {args} и именованными аргументами: {kwargs}")
+        super().__init__(*args, **kwargs)
+
+    def __repr__(self):
+        """Получаем доступ к атрибутам через super() или getattr()"""
+        try:
+            return f"{self.__class__.__name__}({self.name!r}, {self.description!r}, {getattr(self, '_BaseProduct__price', 'без цены')}, {self.quantity})"
+        except AttributeError:
+            return f"{self.__class__.__name__}({self.__dict__})"
+
+
+class BaseProduct(ABC):
+    """Абстрактный базовый класс для всех продуктов."""
+
+    name: str
+    description: str
+    quantity: int
+    __price: float
+
+    @abstractmethod
+    def __init__(self, name: str, description: str, quantity: int) -> None:
         self.name = name
         self.description = description
-        self.__price = price
         self.quantity = quantity
+
+    @property
+    @abstractmethod
+    def price(self) -> float:
+        pass
+
+    @price.setter
+    @abstractmethod
+    def price(self, new_price: float) -> None:
+        pass
+
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
+    @abstractmethod
+    def __add__(self, other):
+        pass
+
+
+class Product(CreateLoggerMixin, BaseProduct):
+    """Класс 'Продукты' со свойствами и методами."""
+
+    def __init__(self, name: str, description: str, price: float = 0, quantity: int = 0) -> None:
+        super().__init__(name, description, quantity)
+        self.__price = price
 
     @classmethod
     def new_product(cls, product_data):
@@ -76,12 +124,13 @@ class LawnGrass(Product):
 class Category:
     """Класс 'Категории продуктов'"""
 
-    name: str  # название
-    description: str  # описание
-    __products: list[Product]  # список товаров категории
+    category_count = None
+    name: str
+    description: str
+    __products: list[Product]
 
-    _category_count = 0  # Счетчик категорий
-    _product_count = 0  # Счетчик количества товаров
+    _category_count = 0
+    _product_count = 0
 
     def __init__(self, name: str, description: str, products: list[Product]) -> None:
         self.name = name

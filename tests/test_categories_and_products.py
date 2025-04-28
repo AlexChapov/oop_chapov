@@ -110,3 +110,20 @@ def test_add_invalid_product_to_category(category):
         pass
     else:
         assert False, "TypeError не был поднят при добавлении неправильного типа объекта"
+
+
+def test_create_logger_mixin(capsys):
+    product1 = Product("Test Product", "Описание продукта", 1200.0, 10)
+
+    captured = capsys.readouterr()
+
+    # Проверка, что в выводе есть аргументы продукта
+    assert "Создан объект класса Product с аргументами: ('Test Product', 'Описание продукта', 10)" in captured.out
+    assert "и именованными аргументами: {}" in captured.out
+    assert "Test Product" in captured.out
+    assert "Описание продукта" in captured.out
+    assert "10" in captured.out
+
+
+def test_repr(product1):
+    assert repr(product1) == "Product('Samsung Galaxy S23 Ultra', '256GB, Серый цвет, 200MP камера', без цены, 5)"
